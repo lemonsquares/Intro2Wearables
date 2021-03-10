@@ -1,0 +1,94 @@
+let i = 0
+let blue = 0x0000FF
+let green = 0x00FF00
+let black = 0x000000
+pins.A1.analogWrite(0)
+pins.A2.analogWrite(0)
+pins.A5.analogWrite(0)
+pins.A6.analogWrite(0)
+
+input.setAccelerometerRange(AcceleratorRange.OneG)
+
+input.onGesture(Gesture.TiltUp, function () {
+	
+})
+input.onGesture(Gesture.TiltRight, function() {
+patternTwo()
+ledpatternRight()
+})
+input.onGesture(Gesture.TiltLeft, function() {
+    patternOne()
+ledpatternLeft()
+
+})
+input.onGesture(Gesture.TiltDown, function() {
+    light.clear()
+})
+
+function patternOne (){
+    for(let i = 0; i <= 9; i++){
+        light.setPixelColor(i,blue)
+        pause(5000)
+    }
+    light.clear()
+    pause(5000)
+
+}
+function patternTwo(){
+        for(let i = 9; i >= 0; i--){
+        light.setPixelColor(i,green)
+        pause(5000)
+        }
+    light.clear()
+    pause(5000)
+}
+function ledpatternRight(){
+    
+        for (let i = 0; i < 255; i++) {
+            pins.A1.analogWrite(i)
+            pause(10)
+		pins.A2.analogWrite(i)
+            pause(10)
+        }
+        for (let i = 255; i > 0; i--){
+            pins.A1.analogWrite(i)
+            pause(10)
+	pins.A2.analogWrite(i)
+	pause(10)
+        }
+}
+function ledpatternLeft(){
+    
+        for (let i = 255; i > 0; i--) {
+            pins.A5.analogWrite(i)
+            pause(10)
+		pins.A6.analogWrite(i)
+            pause(10)
+        }
+        for (let i = 0; i < 255; i++){
+            pins.A5.analogWrite(i)
+            pause(10)
+	pins.A6.analogWrite(i)
+            pause(10)
+        }
+
+}
+    if (input.acceleration(Dimension.X) >= 900) {
+        light.setPixelColor(9, 0x00ffff)
+        light.setPixelColor(5, 0x00ffff)
+        for (let i = 0; i < 255; i++) {
+            pins.A1.analogWrite(i)
+            pause(10)
+        }
+        for (let i = 255; i > 0; i--){
+            pins.A1.analogWrite(i)
+            pause(10)
+        }
+    	console.log("right")
+    } else if (input.acceleration(Dimension.Z) >= 30 && input.acceleration(Dimension.Z) <= 100) {
+        light.setPixelColor(1, 0x000fff)
+        light.setPixelColor(2, 0x000fff)
+        light.setPixelColor(3, 0x000fff)
+    } else {
+        light.clear()
+    }
