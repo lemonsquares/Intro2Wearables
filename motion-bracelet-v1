@@ -1,0 +1,152 @@
+#include <Adafruit_CircuitPlayground.h>
+
+float X, Y, Z;
+int blue = 0x0000FF;
+int green = 0x00FF00;
+int t = 40;
+int rnd = 5;
+int pat1t = 25;
+//cpx external pins
+int Aone = A1;
+int Athr = A3;
+int Afive = A5;
+int Asix = A6;
+
+int brightness = 0;
+int fadeAmount = 10;
+int ledOFF = 0;
+
+void setup() {
+  Serial.begin(9600);
+  CircuitPlayground.begin();
+  for (int i = 0; i <= 9; i++)
+    pinMode(i, OUTPUT);
+  pinMode(Aone, OUTPUT);
+  pinMode(Athr, OUTPUT);
+  pinMode(Afive, OUTPUT);
+  pinMode(Asix, OUTPUT);
+
+}
+
+void loop() {
+  
+  X = CircuitPlayground.motionX();
+  Y = CircuitPlayground.motionY();
+  Z = CircuitPlayground.motionZ();
+
+  
+  Serial.print("X: ");
+  Serial.print(X);
+  Serial.print("  Y: ");
+  Serial.print(Y);
+  Serial.print("  Z: ");
+  Serial.println(Z);
+  
+  CircuitPlayground.clearPixels();
+  // default face up state
+  if (Z <= 10 && Z >= 5) {
+    for (int i = 0; i <= rnd; i++) {
+      pat4();
+    }
+    for (brightness = 0; brightness <= 255; brightness += fadeAmount) {
+    analogWrite(Aone, brightness);
+    delay(30); // Wait for 30 millisecond(s)
+    analogWrite(Athr, brightness);
+    delay(30); // Wait for 30 millisecond(s)
+  }
+  for (brightness = 255; brightness >= 0; brightness -= fadeAmount) {
+    analogWrite(Aone, brightness);
+    delay(30); // Wait for 30 millisecond(s)
+    analogWrite(Athr, brightness);
+    delay(30); // Wait for 30 millisecond(s)
+  }
+  }
+  // board flip to left
+  else if (X <= 10 && X >= 5)
+  {
+    for (int i = 0; i <= rnd; i++) {
+//      fadepat1();
+    }
+  }
+  // board flip to right
+  else if (X <= -5)
+  {
+    for (int i = 0; i <= rnd; i++) {
+      pat4();
+    }
+  }
+  // face down
+  else if (Y <= 2) {
+    CircuitPlayground.clearPixels();
+    delay(1000);
+  } else {
+    CircuitPlayground.clearPixels();
+//    analogWrite(Aone, ledOFF);
+//    analogWrite(Asix, ledOFF);
+  }
+
+  delay(5000);
+
+}
+void pat4() {
+  for (int i = 0; i <= 4; i++) {
+    CircuitPlayground.setPixelColor(i, blue);
+    delay(500);
+  }
+  for (int i = 9; i >= 5; i--) {
+    CircuitPlayground.setPixelColor(i, green);
+    delay(500);
+    CircuitPlayground.setPixelColor(i, 0, 0, 0);
+    CircuitPlayground.setPixelColor(i, green);
+  }
+  CircuitPlayground.clearPixels();
+  delay(1000);
+}
+//void fadepat1() {
+//  for (brightness = 0; brightness <= 255; brightness += fadeAmount) {
+//    analogWrite(Aone, brightness);
+//    delay(30); // Wait for 30 millisecond(s)
+//    analogWrite(Athr, brightness);
+//    delay(30); // Wait for 30 millisecond(s)
+//  }
+//  for (brightness = 255; brightness >= 0; brightness -= fadeAmount) {
+//    analogWrite(Aone, brightness);
+//    delay(30); // Wait for 30 millisecond(s)
+//    analogWrite(Athr, brightness);
+//    delay(30); // Wait for 30 millisecond(s)
+//  }
+//  analogWrite(Aone, ledOFF);
+//  analogWrite(Athr, ledOFF);
+//}
+/*
+void fadepat2() {
+  for (brightness = 0; brightness <= 255; brightness += fadeAmount) {
+    analogWrite(Afive, brightness);
+    delay(30); // Wait for 30 millisecond(s)
+    analogWrite(, brightness);
+    delay(30); // Wait for 30 millisecond(s)
+  }
+  for (brightness = 255; brightness >= 0; brightness -= fadeAmount) {
+    analogWrite(Afive, brightness);
+    delay(30); // Wait for 30 millisecond(s)
+    analogWrite(Athr, brightness);
+    delay(30); // Wait for 30 millisecond(s)
+  }
+  analogWrite(Afive, ledOFF);
+  analogWrite(Athr, ledOFF);
+}
+*/
+/*
+  CircuitPlayground.setPixelColor(6, 0xFF0000);
+    CircuitPlayground.setPixelColor(7, 0xFF0000);
+    CircuitPlayground.setPixelColor(8, 0xFF0000);
+    CircuitPlayground.setPixelColor(9, 0xFF0000);
+    delay(1000);
+    CircuitPlayground.clearPixels();*/
+//  // sets half pixel board color to blue
+//  CircuitPlayground.setPixelColor(5, 0x0000FF);
+//  CircuitPlayground.setPixelColor(6, 0x0000FF);
+//  CircuitPlayground.setPixelColor(7, 0x0000FF);
+//  CircuitPlayground.setPixelColor(8, 0x0000FF);
+//  CircuitPlayground.setPixelColor(9, 0x0000FF);
+//  delay(5000);
